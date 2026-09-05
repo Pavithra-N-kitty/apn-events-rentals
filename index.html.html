@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APN Events & Rentals — Design Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Tamil:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue-900:#131f52;
+  --blue:#1a2a6c;
+  --blue-700:#22347f;
+  --gold:#c9a04a;
+  --gold-deep:#d4952c;
+  --cream:#faf6ef;
+  --cream-2:#f3ecdd;
+  --card:#ffffff;
+  --ink:#22262f;
+  --ink-soft:#5b6270;
+  --line:rgba(26,42,108,0.12);
+  --whatsapp:#25D366;
+  --green:#3a9d5d;
+  --amber:#c98a1f;
+  --red:#c14d3f;
+  --radius:16px;
+  --radius-sm:10px;
+  --shadow:0 10px 30px rgba(26,42,108,0.10);
+  --shadow-sm:0 4px 14px rgba(26,42,108,0.08);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--cream);
+  color:var(--ink);
+  font-family:'Inter',sans-serif;
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:74px;
+}
+.tamil{font-family:'Noto Sans Tamil',sans-serif;}
+h1,h2,h3,.display{
+  font-family:'Fraunces',serif;
+  font-weight:600;
+  color:var(--blue-900);
+  line-height:1.12;
+  letter-spacing:-0.01em;
+  margin:0;
+}
+p{margin:0;}
+a{text-decoration:none;color:inherit;}
+button{font-family:inherit;cursor:pointer;border:none;}
+img{max-width:100%;display:block;}
+
+/* ---------- Bunting / scallop signature motif ---------- */
+.bunting{
+  height:22px;
+  width:100%;
+  background-image:
+    linear-gradient(135deg, var(--gold) 25%, transparent 25%) ,
+    linear-gradient(225deg, var(--gold) 25%, transparent 25%),
+    linear-gradient(45deg, var(--blue) 25%, transparent 25%),
+    linear-gradient(315deg, var(--blue) 25%, transparent 25%);
+  background-position: 0 0, 11px 0, 0 0, 11px 0;
+  background-size: 22px 22px;
+  background-repeat:repeat-x;
+  opacity:0.9;
+}
+.bunting.soft{opacity:0.35; height:14px; background-size:16px 16px; background-position:0 0,8px 0,0 0,8px 0;}
+
+/* ---------- Top bars ---------- */
+.topbar{
+  position:sticky; top:0; z-index:40;
+  background:var(--blue);
+  color:#fff;
+}
+.topbar-inner{
+  max-width:1180px; margin:0 auto; padding:12px 18px;
+  display:flex; align-items:center; justify-content:space-between; gap:14px;
+}
+.logo{display:flex; align-items:center; gap:10px;}
+.logo-mark{
+  min-width:44px; height:38px; padding:0 8px; border-radius:10px;
+  background:linear-gradient(160deg,var(--gold),var(--gold-deep));
+  display:flex; align-items:center; justify-content:center;
+  color:var(--blue-900); font-family:'Fraunces',serif; font-weight:700; font-size:14px; letter-spacing:0.02em;
+  flex:none;
+}
+.logo-text{display:flex; flex-direction:column; line-height:1.05;}
+.logo-text b{font-family:'Fraunces',serif; font-size:21px; letter-spacing:0.01em;}
+.logo-text span{font-size:13.5px; color:var(--gold); letter-spacing:0.08em; text-transform:uppercase;}
+.nav-desktop{display:none; gap:22px; font-size:14.5px; font-weight:500;}
+.nav-desktop a{opacity:0.88; padding:6px 2px; border-bottom:2px solid transparent;}
+.nav-desktop a.active, .nav-desktop a:hover{opacity:1; border-color:var(--gold);}
+.top-actions{display:flex; align-items:center; gap:8px;}
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:7px;
+  padding:10px 16px; border-radius:999px; font-weight:600; font-size:13.5px;
+  transition:transform .15s ease, box-shadow .15s ease, filter .15s ease;
+  white-space:nowrap;
+}
+.btn:active{transform:scale(0.97);}
+.btn-primary{background:var(--gold); color:var(--blue-900); box-shadow:0 6px 16px rgba(201,160,74,0.35);}
+.btn-primary:hover{filter:brightness(1.05);}
+.btn-outline-light{background:rgba(255,255,255,0.08); color:#fff; border:1px solid rgba(255,255,255,0.35);}
+.btn-outline-light:hover{background:rgba(255,255,255,0.16);}
+.btn-block{width:100%;}
+.btn-lg{padding:14px 20px; font-size:15px; border-radius:14px;}
+.icon-btn{
+  width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,0.1); color:#fff;
+}
+.hide-desktop{display:inline-flex;}
+.show-desktop{display:none;}
+
+/* ---------- shell / sections ---------- */
+.screen{display:none;}
+.screen.active{display:block; animation:fadeIn .25s ease;}
+@keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+.wrap{max-width:1180px; margin:0 auto; padding:0 18px;}
+.section{padding:36px 0;}
+.section-head{margin-bottom:20px;}
+.eyebrow{
+  font-size:11.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold-deep);
+  font-weight:700; margin-bottom:8px; display:block;
+}
+.section-title{font-size:clamp(22px,4vw,32px);}
+.section-sub{color:var(--ink-soft); margin-top:8px; font-size:15px; max-width:60ch;}
+
+/* ---------- Hero ---------- */
+.hero{
+  position:relative; overflow:hidden;
+  background:
+    radial-gradient(120% 90% at 15% 0%, rgba(212,149,44,0.28), transparent 55%),
+    linear-gradient(180deg, var(--blue-900), var(--blue) 70%);
+  color:#fff; padding:38px 0 30px;
+}
+.hero-inner{display:grid; gap:26px;}
+.hero-tag{
+  font-family:'Noto Sans Tamil',sans-serif; font-size:14.5px; color:var(--gold);
+  margin-bottom:12px; opacity:0.95;
+}
+.hero h1{color:#fff; font-size:clamp(30px,6vw,46px); max-width:12ch;}
+.hero p.lead{color:rgba(255,255,255,0.82); margin-top:14px; font-size:15.5px; max-width:46ch; line-height:1.55;}
+.hero-actions{display:flex; flex-wrap:wrap; gap:10px; margin-top:22px;}
+.btn-whatsapp{background:var(--whatsapp); color:#fff;}
+.hero-media{
+  border-radius:20px; overflow:hidden; position:relative; min-height:220px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.35);
+  border:1px solid rgba(255,255,255,0.15);
+}
+.hero-media img{width:100%; height:100%; object-fit:cover; min-height:220px;}
+.hero-stats{
+  display:flex; gap:0; margin-top:18px; border-radius:14px; overflow:hidden;
+  background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14);
+}
+.hero-stat{flex:1; padding:14px 10px; text-align:center; border-right:1px solid rgba(255,255,255,0.14);}
+.hero-stat:last-child{border-right:none;}
+.hero-stat b{display:block; font-family:'Fraunces',serif; font-size:19px; color:var(--gold);}
+.hero-stat span{font-size:11px; color:rgba(255,255,255,0.7);}
+
+/* ---------- Plan event banner ---------- */
+.plan-card{
+  background:linear-gradient(120deg,var(--card),var(--cream-2));
+  border:1px solid var(--line); border-radius:var(--radius);
+  padding:22px; box-shadow:var(--shadow-sm);
+  display:grid; gap:14px;
+}
+.plan-card p{color:var(--ink-soft); font-size:14.5px; line-height:1.6;}
+
+/* ---------- Category cards ---------- */
+.cat-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px;}
+.cat-card{
+  background:var(--card); border-radius:var(--radius); overflow:hidden;
+  box-shadow:var(--shadow-sm); border:1px solid var(--line);
+  cursor:pointer; transition:transform .18s ease, box-shadow .18s ease;
+  display:flex; flex-direction:column;
+}
+.cat-card:hover{transform:translateY(-3px); box-shadow:var(--shadow);}
+.cat-img{height:96px; background-size:cover; background-position:center; position:relative;}
+.cat-img::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg, rgba(19,31,82,0.55), transparent 60%);}
+.cat-body{padding:11px 12px 13px;}
+.cat-body b{font-size:13.5px; color:var(--blue-900);}
+.cat-body span{display:block; font-size:11.5px; color:var(--ink-soft); margin-top:2px;}
+
+/* ---------- Product grid ---------- */
+.prod-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px;}
+.prod-card{
+  background:var(--card); border-radius:var(--radius); overflow:hidden;
+  border:1px solid var(--line); box-shadow:var(--shadow-sm);
+  display:flex; flex-direction:column;
+}
+.prod-img{aspect-ratio:1/1; background-size:cover; background-position:center; position:relative;}
+.badge{
+  position:absolute; top:8px; left:8px; font-size:10px; font-weight:700; padding:4px 9px;
+  border-radius:999px; letter-spacing:0.02em;
+}
+.badge.green{background:rgba(58,157,93,0.15); color:var(--green);}
+.badge.amber{background:rgba(201,138,31,0.16); color:var(--amber);}
+.badge.red{background:rgba(193,77,63,0.15); color:var(--red);}
+.prod-body{padding:11px 12px 13px; display:flex; flex-direction:column; gap:6px; flex:1;}
+.prod-name{font-size:13.5px; font-weight:600; color:var(--blue-900);}
+.prod-name .ta{display:block; font-size:11.5px; color:var(--ink-soft); font-weight:400;}
+.prod-price{font-family:'Fraunces',serif; font-weight:700; color:var(--gold-deep); font-size:16px;}
+.prod-price span{font-size:11px; color:var(--ink-soft); font-weight:400; font-family:'Inter',sans-serif;}
+.qty-row{display:flex; align-items:center; justify-content:space-between; margin-top:auto; gap:8px;}
+.stepper{display:flex; align-items:center; border:1px solid var(--line); border-radius:999px; overflow:hidden;}
+.stepper button{width:26px; height:26px; background:var(--cream-2); color:var(--blue-900); font-weight:700; font-size:14px;}
+.stepper span{width:24px; text-align:center; font-size:13px; font-weight:600;}
+.add-btn{
+  background:var(--blue); color:#fff; padding:7px 12px; border-radius:999px; font-size:12px; font-weight:700;
+  flex:1; display:flex; align-items:center; justify-content:center; gap:6px;
+}
+
+/* ---------- filter bar ---------- */
+.filter-bar{display:flex; gap:8px; overflow-x:auto; padding:4px 0 14px; scrollbar-width:none;}
+.filter-bar::-webkit-scrollbar{display:none;}
+.chip{
+  flex:none; padding:9px 15px; border-radius:999px; font-size:13px; font-weight:600;
+  background:var(--card); border:1px solid var(--line); color:var(--ink-soft);
+}
+.chip.active{background:var(--blue); color:#fff; border-color:var(--blue);}
+.search-row{display:flex; gap:8px; margin-bottom:12px;}
+.search-input{
+  flex:1; padding:12px 14px; border-radius:12px; border:1px solid var(--line); background:var(--card);
+  font-size:14px; color:var(--ink);
+}
+.sort-select{padding:0 12px; border-radius:12px; border:1px solid var(--line); background:var(--card); font-size:13px; color:var(--ink-soft);}
+
+/* ---------- feature / trust ---------- */
+.feat-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px;}
+.feat-card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow-sm);}
+.feat-icon{
+  width:38px; height:38px; border-radius:10px; background:linear-gradient(160deg,var(--gold),var(--gold-deep));
+  display:flex; align-items:center; justify-content:center; color:var(--blue-900); font-size:17px; margin-bottom:10px;
+}
+.feat-card b{display:block; font-size:13.5px; color:var(--blue-900); margin-bottom:3px;}
+.feat-card p{font-size:12.5px; color:var(--ink-soft); line-height:1.5;}
+
+/* ---------- footer ---------- */
+footer{background:var(--blue-900); color:rgba(255,255,255,0.75); padding:34px 0 100px; margin-top:20px;}
+footer .wrap{display:grid; gap:22px;}
+footer b{color:#fff; font-family:'Fraunces',serif; font-size:17px;}
+footer .cols{display:grid; grid-template-columns:1fr; gap:18px; font-size:13.5px;}
+footer .cols div b{display:block; margin-bottom:8px; font-size:13px; color:var(--gold);}
+footer .cols a{display:block; padding:4px 0; opacity:0.85;}
+
+/* ---------- mobile bottom nav ---------- */
+.bottom-nav{
+  position:fixed; bottom:0; left:0; right:0; z-index:50;
+  background:#fff; border-top:1px solid var(--line);
+  display:flex; box-shadow:0 -6px 20px rgba(26,42,108,0.12);
+}
+.bottom-nav button{
+  flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;
+  padding:9px 4px 8px; background:none; color:var(--ink-soft); font-size:10.5px; font-weight:600; position:relative;
+}
+.bottom-nav button.active{color:var(--blue);}
+.bottom-nav .ic{font-size:18px;}
+.cart-dot{
+  position:absolute; top:2px; right:24%; background:var(--gold-deep); color:#fff; font-size:9px; font-weight:700;
+  min-width:15px; height:15px; border-radius:999px; display:flex; align-items:center; justify-content:center; padding:0 3px;
+}
+.fab-row{position:fixed; right:14px; bottom:86px; z-index:45; display:flex; flex-direction:column; gap:10px;}
+.fab{
+  width:50px; height:50px; border-radius:999px; display:flex; align-items:center; justify-content:center;
+  font-size:21px; color:#fff; box-shadow:0 10px 22px rgba(0,0,0,0.25);
+}
+.fab.wa{background:var(--whatsapp);}
+.fab.call{background:var(--blue);}
+
+/* ---------- cards / generic ---------- */
+.card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow-sm); padding:16px;}
+.divider{height:1px; background:var(--line); margin:14px 0;}
+
+/* ---------- gallery ---------- */
+.gal-grid{columns:2; column-gap:10px;}
+.gal-grid img{margin-bottom:10px; border-radius:12px; width:100%; box-shadow:var(--shadow-sm);}
+
+/* ---------- forms ---------- */
+.field{margin-bottom:14px;}
+.field label{display:block; font-size:12.5px; font-weight:700; color:var(--blue-900); margin-bottom:6px;}
+.field input, .field select, .field textarea{
+  width:100%; padding:13px 14px; border-radius:12px; border:1.5px solid var(--line); background:var(--card);
+  font-size:14.5px; color:var(--ink); font-family:inherit;
+}
+.field input:focus, .field select:focus, .field textarea:focus{outline:2px solid var(--gold); border-color:var(--gold);}
+.field textarea{resize:vertical; min-height:80px;}
+.field-req::after{content:" *"; color:var(--red);}
+
+/* ---------- progress steps ---------- */
+.steps{display:flex; align-items:center; margin-bottom:22px;}
+.step{display:flex; flex-direction:column; align-items:center; flex:1; position:relative;}
+.step .dot{
+  width:30px; height:30px; border-radius:999px; background:var(--cream-2); border:2px solid var(--line);
+  display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:700; color:var(--ink-soft); z-index:2;
+}
+.step.done .dot{background:var(--green); border-color:var(--green); color:#fff;}
+.step.current .dot{background:var(--blue); border-color:var(--blue); color:#fff;}
+.step span.lbl{font-size:9.5px; margin-top:5px; color:var(--ink-soft); text-align:center; font-weight:600;}
+.step-line{position:absolute; top:14px; left:-50%; width:100%; height:2px; background:var(--line); z-index:1;}
+.step:first-child .step-line{display:none;}
+.step.done .step-line, .step.current .step-line{background:var(--green);}
+
+/* ---------- calendar ---------- */
+.cal-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;}
+.cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:5px; text-align:center;}
+.cal-dow{font-size:10.5px; color:var(--ink-soft); font-weight:700; padding-bottom:4px;}
+.cal-day{
+  aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; border-radius:10px;
+  font-size:13px; font-weight:600; color:var(--ink);
+}
+.cal-day.avail{background:var(--cream-2); cursor:pointer;}
+.cal-day.unavail{color:#c9c9c9; text-decoration:line-through;}
+.cal-day.sel{background:var(--blue); color:#fff;}
+.cal-day.empty{visibility:hidden;}
+
+/* ---------- summary rows ---------- */
+.sum-row{display:flex; justify-content:space-between; font-size:14px; padding:7px 0; color:var(--ink-soft);}
+.sum-row.total{font-size:17px; font-weight:700; color:var(--blue-900); border-top:1px dashed var(--line); margin-top:6px; padding-top:12px;}
+.sum-row.total span:last-child{color:var(--gold-deep); font-family:'Fraunces',serif;}
+
+/* ---------- status badges ---------- */
+.status-pill{padding:5px 12px; border-radius:999px; font-size:11.5px; font-weight:700; display:inline-block;}
+.status-pending{background:rgba(201,138,31,0.15); color:var(--amber);}
+.status-confirmed{background:rgba(58,157,93,0.15); color:var(--green);}
+.status-completed{background:rgba(91,98,112,0.14); color:var(--ink-soft);}
+.status-cancelled{background:rgba(193,77,63,0.15); color:var(--red);}
+
+/* ---------- track progress ---------- */
+.track-line{display:flex; align-items:center; margin:20px 0;}
+.track-dot{width:14px; height:14px; border-radius:999px; background:var(--line); flex:none;}
+.track-dot.on{background:var(--green);}
+.track-bar{flex:1; height:3px; background:var(--line);}
+.track-bar.on{background:var(--green);}
+
+/* ---------- proto nav (design-tool chrome, not part of the real product) ---------- */
+.proto-bar{
+  background:var(--blue-900); color:#fff; padding:9px 14px; display:flex; align-items:center; gap:10px;
+  overflow-x:auto; position:sticky; top:0; z-index:60; font-size:12.5px; border-bottom:2px solid var(--gold);
+}
+.proto-bar b{color:var(--gold); font-weight:700; flex:none;}
+.proto-bar select{
+  background:var(--blue-700); color:#fff; border:1px solid rgba(255,255,255,0.25); border-radius:8px; padding:6px 10px; font-size:12.5px;
+}
+.viewport-toggle{display:flex; gap:4px; flex:none;}
+.viewport-toggle button{
+  background:var(--blue-700); color:#fff; border:1px solid rgba(255,255,255,0.25); padding:6px 10px; border-radius:8px; font-size:11.5px;
+}
+.viewport-toggle button.on{background:var(--gold); color:var(--blue-900); border-color:var(--gold);}
+.stage{padding:22px 0 40px; display:flex; justify-content:center;}
+.device{
+  background:#fff; width:100%; max-width:428px; border-radius:28px; overflow:hidden;
+  box-shadow:0 30px 70px rgba(19,31,82,0.28); border:8px solid #10173d;
+}
+.device.desktop{max-width:1180px; border-radius:12px; border-width:1px; border-color:var(--line);}
+.device-scroll{max-height:82vh; overflow-y:auto;}
+
+/* ---------- Admin panel ---------- */
+body.admin-mode .topbar, body.admin-mode .bottom-nav, body.admin-mode .fab-row, body.admin-mode footer{display:none;}
+.admin-shell{display:flex; min-height:100%; background:var(--cream);}
+.admin-sidebar{
+  width:210px; flex:none; background:var(--blue-900); color:rgba(255,255,255,0.82);
+  padding:18px 14px; display:flex; flex-direction:column; gap:2px;
+}
+.admin-sidebar .logo{margin-bottom:22px; padding:0 4px;}
+.admin-sidebar .logo-text b, .admin-sidebar .logo-text span{color:#fff;}
+.admin-nav-item{
+  display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px; font-size:13.5px; font-weight:600;
+  color:rgba(255,255,255,0.75);
+}
+.admin-nav-item .ic{font-size:15px; width:18px; text-align:center;}
+.admin-nav-item.active, .admin-nav-item:hover{background:rgba(255,255,255,0.09); color:#fff;}
+.admin-nav-item.active{border-left:3px solid var(--gold); padding-left:9px;}
+.admin-sidebar .sep{height:1px; background:rgba(255,255,255,0.12); margin:12px 4px;}
+.admin-back{margin-top:auto; font-size:12px; color:rgba(255,255,255,0.55); padding:10px 12px;}
+.admin-main{flex:1; min-width:0; padding:22px 26px 60px;}
+.admin-header{display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; gap:14px; flex-wrap:wrap;}
+.admin-header h2{font-size:21px;}
+.admin-header p{color:var(--ink-soft); font-size:13px; margin-top:3px;}
+.admin-avatar{width:36px; height:36px; border-radius:999px; background:var(--gold); color:var(--blue-900); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; flex:none;}
+.admin-user-row{display:flex; align-items:center; gap:10px;}
+.metric-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:22px;}
+.metric-card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow-sm);}
+.metric-card .m-icon{width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:15px; margin-bottom:10px;}
+.metric-card b{display:block; font-family:'Fraunces',serif; font-size:24px; color:var(--blue-900);}
+.metric-card span{font-size:12px; color:var(--ink-soft);}
+.metric-card .delta{font-size:11px; font-weight:700; margin-left:6px;}
+.delta.up{color:var(--green);} .delta.down{color:var(--red);}
+.admin-grid-2{display:grid; grid-template-columns:1.5fr 1fr; gap:16px;}
+.admin-card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow-sm); padding:18px;}
+.admin-card-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;}
+.admin-card-head b{font-family:'Fraunces',serif; font-size:15.5px; color:var(--blue-900);}
+.admin-link{font-size:12.5px; font-weight:700; color:var(--blue);}
+table.admin-table{width:100%; border-collapse:collapse; font-size:13px;}
+table.admin-table th{
+  text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft);
+  padding:8px 10px; border-bottom:1.5px solid var(--line); font-weight:700;
+}
+table.admin-table td{padding:11px 10px; border-bottom:1px solid var(--line); color:var(--ink); vertical-align:middle;}
+table.admin-table tr:hover td{background:var(--cream-2);}
+.table-avatar{width:30px; height:30px; border-radius:8px; background-size:cover; background-position:center; display:inline-block; vertical-align:middle; margin-right:8px;}
+.mini-btn{padding:6px 11px; border-radius:8px; font-size:11.5px; font-weight:700; background:var(--cream-2); color:var(--blue);}
+.mini-btn.danger{color:var(--red);}
+.progress-track{height:7px; border-radius:999px; background:var(--cream-2); overflow:hidden; margin-top:6px;}
+.progress-fill{height:100%; border-radius:999px; background:var(--blue);}
+.admin-filter-row{display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; align-items:center; justify-content:space-between;}
+.admin-search{padding:10px 14px; border-radius:10px; border:1px solid var(--line); background:var(--card); font-size:13px; min-width:220px;}
+.admin-cal{display:grid; grid-template-columns:repeat(7,1fr); gap:6px;}
+.admin-cal .adow{font-size:10.5px; font-weight:700; color:var(--ink-soft); text-align:center; padding-bottom:4px;}
+.admin-cal .aday{
+  min-height:64px; border-radius:10px; background:var(--cream-2); padding:6px; font-size:11.5px; font-weight:700; color:var(--ink-soft);
+  display:flex; flex-direction:column; gap:3px; position:relative;
+}
+.admin-cal .aday.today{outline:2px solid var(--gold);}
+.aday .ev{
+  font-size:9.5px; font-weight:600; padding:2px 5px; border-radius:5px; background:rgba(26,42,108,0.1); color:var(--blue);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.aday .ev.busy{background:rgba(193,77,63,0.15); color:var(--red);}
+.product-thumb{width:38px; height:38px; border-radius:8px; background-size:cover; background-position:center; display:inline-block; vertical-align:middle; margin-right:8px;}
+
+/* ---------- Desktop breakpoint ---------- */
+@media (min-width:900px){
+  .hide-desktop{display:none;}
+  .show-desktop{display:inline-flex;}
+  .nav-desktop{display:flex;}
+  .hero-inner{grid-template-columns:1.1fr 1fr; align-items:center;}
+  .cat-grid{grid-template-columns:repeat(4,1fr);}
+  .prod-grid{grid-template-columns:repeat(4,1fr);}
+  .feat-grid{grid-template-columns:repeat(4,1fr);}
+  footer .cols{grid-template-columns:repeat(4,1fr);}
+  .bottom-nav{display:none;}
+  .device.mobile{max-width:390px;}
+  body{padding-bottom:0;}
+}
+@media (min-width:640px) and (max-width:899px){
+  .cat-grid{grid-template-columns:repeat(3,1fr);}
+  .prod-grid{grid-template-columns:repeat(3,1fr);}
+  .feat-grid{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ PROTOTYPE CONTROL BAR (design-tool chrome) ============ -->
+<div class="proto-bar">
+  <select id="screenSelect" onchange="goTo(this.value)"></select>
+  <div class="viewport-toggle">
+    <button id="vpMobile" class="on" onclick="setViewport('mobile')">📱 Mobile</button>
+    <button id="vpDesktop" onclick="setViewport('desktop')">💻 Desktop</button>
+  </div>
+  <button onclick="goTo('admin-dashboard')" style="background:var(--gold); color:var(--blue-900); border:none; padding:6px 12px; border-radius:8px; font-size:11.5px; font-weight:700; flex:none;">⚙ Open Admin Console</button>
+  <span style="opacity:.6; flex:none;">Click cards / buttons to walk the flow →</span>
+</div>
+
+<div class="stage">
+<div class="device mobile" id="device">
+<div class="device-scroll" id="deviceScroll">
+
+<!-- ============ APP TOPBAR ============ -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="logo" onclick="goTo('home')">
+      <div class="logo-mark">APN</div>
+      <div class="logo-text"><b>Events</b><span>&amp; Rentals</span></div>
+    </a>
+    <nav class="nav-desktop">
+      <a onclick="goTo('home')" class="nav-link" data-s="home">Home</a>
+      <a onclick="goTo('categories')" class="nav-link" data-s="categories">Rentals</a>
+      <a onclick="goTo('listing')" class="nav-link" data-s="listing">Cooking Vessels</a>
+      <a onclick="goTo('listing')" class="nav-link" data-s="listing2">Wedding &amp; Decor</a>
+      <a onclick="goTo('gallery')" class="nav-link" data-s="gallery">Gallery</a>
+      <a onclick="goTo('about')" class="nav-link" data-s="about">About Us</a>
+      <a onclick="goTo('contact')" class="nav-link" data-s="contact">Contact</a>
+    </nav>
+    <div class="top-actions">
+      <button class="btn btn-primary show-desktop" onclick="goTo('cart')">Book Now</button>
+      <button class="icon-btn show-desktop" title="WhatsApp">💬</button>
+      <button class="icon-btn hide-desktop" onclick="goTo('cart')" title="Cart">🛒</button>
+      <button class="icon-btn hide-desktop" title="Menu">☰</button>
+    </div>
+  </div>
+  <div class="bunting soft"></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 1. HOMEPAGE -->
+<!-- ============================================================ -->
+<section class="screen active" id="s-home">
+  <div class="hero">
+    <div class="wrap hero-inner">
+      <div>
+        <div class="hero-tag tamil">உங்கள் விழாவிற்கு தேவையான அனைத்தும் ஒரே இடத்தில்</div>
+        <h1>Make your event special, down to the last vessel.</h1>
+        <p class="lead">From tents and seating to wedding decorations and large-scale cooking vessels — a family-run rental service trusted across Tamil Nadu for weddings, temple functions and celebrations of every size.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary btn-lg" onclick="goTo('categories')">Browse Rentals</button>
+          <button class="btn btn-outline-light btn-lg" onclick="goTo('booking-date')">Book Your Event</button>
+          <button class="btn btn-whatsapp btn-lg" onclick="alert('Opens WhatsApp chat')">💬 WhatsApp Us</button>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><b>18+ yrs</b><span>Family run</span></div>
+          <div class="hero-stat"><b>1,200+</b><span>Events served</span></div>
+          <div class="hero-stat"><b>60+</b><span>Villages &amp; towns</span></div>
+        </div>
+      </div>
+      <div class="hero-media">
+        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=900&auto=format&fit=crop" alt="Decorated wedding mandapam with tent and chairs">
+      </div>
+    </div>
+  </div>
+  <div class="bunting"></div>
+
+  <div class="wrap section">
+    <div class="plan-card">
+      <span class="eyebrow">Tell us once</span>
+      <h2 class="section-title" style="font-size:22px;">Planning a wedding, reception or temple function?</h2>
+      <p>Share your event date, guest count and location — our family will help arrange tents, seating, cooking vessels and decoration as one dependable order, priced and confirmed by phone.</p>
+      <button class="btn btn-primary" style="align-self:flex-start;" onclick="goTo('booking-date')">Plan My Event →</button>
+    </div>
+  </div>
+
+  <div class="wrap section" style="padding-top:0;">
+    <div class="section-head">
+      <span class="eyebrow">What we provide</span>
+      <h2 class="section-title">Every category, one supplier</h2>
+    </div>
+    <div class="cat-grid" id="homeCatGrid"></div>
+  </div>
+
+  <div class="wrap section" style="padding-top:0;">
+    <div class="section-head" style="display:flex; align-items:baseline; justify-content:space-between;">
+      <div>
+        <span class="eyebrow">Popular this season</span>
+        <h2 class="section-title">Featured items</h2>
+      </div>
+      <a onclick="goTo('listing')" style="font-size:13px; font-weight:700; color:var(--blue);">See all →</a>
+    </div>
+    <div class="prod-grid" id="homeProdGrid"></div>
+  </div>
+
+  <div class="wrap section" style="padding-top:0;">
+    <div class="section-head">
+      <span class="eyebrow">Why families choose us</span>
+      <h2 class="section-title">Reliable, from the first call to pickup</h2>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-icon">👪</div><b>Family business</b><p>Three generations of APN family serving weddings across the district.</p></div>
+      <div class="feat-card"><div class="feat-icon">✔️</div><b>Quality equipment</b><p>Vessels, tents and furniture checked and cleaned before every event.</p></div>
+      <div class="feat-card"><div class="feat-icon">💰</div><b>Fair, upfront rates</b><p>Transparent per-item and transport pricing — no surprises on delivery day.</p></div>
+      <div class="feat-card"><div class="feat-icon">🚚</div><b>We deliver &amp; set up</b><p>Our team handles delivery, tent pitching and pickup after your event.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 2. CATEGORIES -->
+<!-- ============================================================ -->
+<section class="screen" id="s-categories">
+  <div class="wrap section">
+    <div class="section-head">
+      <span class="eyebrow">Rental categories</span>
+      <h2 class="section-title">What are you setting up?</h2>
+      <p class="section-sub">Choose a category to see items, sizes and live availability.</p>
+    </div>
+    <div class="cat-grid" id="fullCatGrid" style="grid-template-columns:repeat(2,1fr);"></div>
+  </div>
+  <div class="wrap section" style="padding-top:0;">
+    <span class="eyebrow">Tents &amp; Venue Setup — sub types</span>
+    <div class="filter-bar" style="margin-top:10px;">
+      <div class="chip active">All</div>
+      <div class="chip">Pipe Tent</div>
+      <div class="chip">Arabian Tent</div>
+      <div class="chip">Side Screen</div>
+      <div class="chip">Shamiyana</div>
+      <div class="chip">Panthal</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 3. PRODUCT LISTING -->
+<!-- ============================================================ -->
+<section class="screen" id="s-listing">
+  <div class="wrap section">
+    <div class="section-head">
+      <span class="eyebrow">Cooking Vessels</span>
+      <h2 class="section-title">Bulk cooking vessels on rent</h2>
+    </div>
+    <div class="search-row">
+      <input class="search-input" placeholder="Search vessels, e.g. bhagona, biryani pot...">
+      <select class="sort-select"><option>Popular</option><option>Price: Low–High</option><option>Price: High–Low</option><option>Recently added</option></select>
+    </div>
+    <div class="filter-bar">
+      <div class="chip active">All</div>
+      <div class="chip">Category</div>
+      <div class="chip">Price Range</div>
+      <div class="chip">Availability</div>
+      <div class="chip">Capacity</div>
+    </div>
+    <div class="prod-grid" id="listingGrid"></div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 4. PRODUCT DETAILS -->
+<!-- ============================================================ -->
+<section class="screen" id="s-detail">
+  <div class="wrap section">
+    <a onclick="goTo('listing')" style="font-size:13px; font-weight:700; color:var(--blue); display:inline-block; margin-bottom:12px;">← Back to Cooking Vessels</a>
+    <div class="hero-media" style="margin-bottom:14px;">
+      <img src="https://images.unsplash.com/photo-1590779033100-9f60a05a013d?q=80&w=900&auto=format&fit=crop" alt="Large biryani cooking vessel">
+    </div>
+    <h2 class="section-title" style="font-size:21px;">Large Biryani Vessel — 50kg <span class="tamil" style="display:block; font-size:14px; color:var(--ink-soft); font-weight:400; margin-top:4px;">பெரிய பிரியாணி பாத்திரம்</span></h2>
+    <p style="color:var(--ink-soft); font-size:14px; margin-top:10px; line-height:1.6;">Heavy-gauge aluminium vessel suited for large weddings and temple annadhanam, cooks up to 50kg of rice per batch. Comes with matching lid and stirring paddle.</p>
+    <div style="display:flex; align-items:center; justify-content:space-between; margin:16px 0;">
+      <div class="prod-price" style="font-size:22px;">₹350<span>/day</span></div>
+      <span class="badge green" style="position:static;">● Available</span>
+    </div>
+    <div class="card" style="margin-bottom:14px;">
+      <div class="sum-row"><span>Category</span><span>Cooking Vessels</span></div>
+      <div class="sum-row"><span>Capacity</span><span>50 kg rice</span></div>
+      <div class="sum-row"><span>Available Qty</span><span>6 units</span></div>
+      <div class="sum-row"><span>Condition</span><span>Excellent</span></div>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px; margin-bottom:14px;">
+      <span style="font-size:13px; font-weight:700; color:var(--blue-900);">Quantity</span>
+      <div class="stepper"><button onclick="stepQty(-1)">–</button><span id="detailQty">1</span><button onclick="stepQty(1)">+</button></div>
+    </div>
+    <button class="btn btn-primary btn-block btn-lg" onclick="addToCartToast()">Add to Booking</button>
+
+    <div style="margin-top:26px;">
+      <span class="eyebrow">You may also need</span>
+      <div style="display:flex; gap:12px; overflow-x:auto; padding:10px 0;" id="similarRow"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 5. CART -->
+<!-- ============================================================ -->
+<section class="screen" id="s-cart">
+  <div class="wrap section">
+    <div class="section-head">
+      <span class="eyebrow">Your booking</span>
+      <h2 class="section-title">Cart</h2>
+    </div>
+    <div id="cartList"></div>
+    <div class="card" style="margin-top:16px;">
+      <div class="sum-row"><span>Subtotal</span><span id="cartSubtotal">₹0</span></div>
+      <div class="sum-row"><span>Transport charge</span><span>Calculated after location</span></div>
+      <div class="sum-row total"><span>Estimated total</span><span id="cartTotal">₹0</span></div>
+    </div>
+    <button class="btn btn-primary btn-block btn-lg" style="margin-top:14px;" onclick="goTo('booking-date')">Continue to Booking →</button>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 6. BOOKING — DATE -->
+<!-- ============================================================ -->
+<section class="screen" id="s-booking-date">
+  <div class="wrap section">
+    <div class="steps">
+      <div class="step done"><div class="dot">✓</div><span class="lbl">Items</span></div>
+      <div class="step current"><div class="step-line"></div><div class="dot">2</div><span class="lbl">Date</span></div>
+      <div class="step"><div class="step-line"></div><div class="dot">3</div><span class="lbl">Details</span></div>
+      <div class="step"><div class="step-line"></div><div class="dot">4</div><span class="lbl">Location</span></div>
+      <div class="step"><div class="step-line"></div><div class="dot">5</div><span class="lbl">Confirm</span></div>
+    </div>
+    <h2 class="section-title" style="font-size:20px; margin-bottom:14px;">When is your event?</h2>
+    <div class="card">
+      <div class="cal-head">
+        <button class="icon-btn" style="background:var(--cream-2); color:var(--blue);">‹</button>
+        <b style="font-family:'Fraunces',serif; color:var(--blue-900);">October 2026</b>
+        <button class="icon-btn" style="background:var(--cream-2); color:var(--blue);">›</button>
+      </div>
+      <div class="cal-grid">
+        <div class="cal-dow">S</div><div class="cal-dow">M</div><div class="cal-dow">T</div><div class="cal-dow">W</div><div class="cal-dow">T</div><div class="cal-dow">F</div><div class="cal-dow">S</div>
+        <div id="calDays" style="display:contents;"></div>
+      </div>
+      <p style="font-size:11.5px; color:var(--ink-soft); margin-top:12px;"><span style="color:var(--green);">●</span> Available &nbsp; <span style="color:#c9c9c9;">●</span> Fully booked &nbsp; <span style="color:var(--blue);">●</span> Selected</p>
+    </div>
+    <div class="card" style="margin-top:12px; display:flex; align-items:center; gap:10px;">
+      <span style="font-size:20px;">✅</span>
+      <div><b style="font-size:13.5px; color:var(--blue-900);">All items available!</b><p style="font-size:12px; color:var(--ink-soft);">Selected date: Sat, 24 Oct 2026</p></div>
+    </div>
+    <button class="btn btn-primary btn-block btn-lg" style="margin-top:16px;" onclick="goTo('booking-details')">Check Availability →</button>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 7. BOOKING — CUSTOMER & EVENT DETAILS -->
+<!-- ============================================================ -->
+<section class="screen" id="s-booking-details">
+  <div class="wrap section">
+    <div class="steps">
+      <div class="step done"><div class="dot">✓</div><span class="lbl">Items</span></div>
+      <div class="step done"><div class="step-line"></div><div class="dot">✓</div><span class="lbl">Date</span></div>
+      <div class="step current"><div class="step-line"></div><div class="dot">3</div><span class="lbl">Details</span></div>
+      <div class="step"><div class="step-line"></div><div class="dot">4</div><span class="lbl">Location</span></div>
+      <div class="step"><div class="step-line"></div><div class="dot">5</div><span class="lbl">Confirm</span></div>
+    </div>
+    <span class="eyebrow">Customer details</span>
+    <div class="field"><label class="field-req">Full name</label><input placeholder="e.g. Kavitha Raman"></div>
+    <div class="field"><label class="field-req">Mobile number</label><input placeholder="+91 9xxxx xxxxx"></div>
+    <div class="field"><label>Email (optional)</label><input placeholder="you@email.com"></div>
+    <div class="field"><label class="field-req">WhatsApp number</label><input placeholder="+91 9xxxx xxxxx"></div>
+    <div class="divider"></div>
+    <span class="eyebrow">Event details</span>
+    <div class="field"><label class="field-req">Event type</label>
+      <select><option>Wedding</option><option>Reception</option><option>Engagement</option><option>Birthday</option><option>Temple Function</option><option>Annadhanam</option><option>Corporate Event</option><option>Family Function</option><option>Other</option></select>
+    </div>
+    <div class="field"><label>Event date</label><input value="Sat, 24 Oct 2026" disabled style="background:var(--cream-2);"></div>
+    <div class="field"><label class="field-req">Expected guests</label><input placeholder="e.g. 400" type="number"></div>
+    <div class="field"><label class="field-req">Event address</label><textarea placeholder="Start typing address..."></textarea></div>
+    <div class="field"><label>Additional notes</label><textarea placeholder="Anything else we should know?"></textarea></div>
+    <button class="btn btn-primary btn-block btn-lg" onclick="goTo('booking-location')">Continue →</button>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 8. BOOKING — LOCATION & TRANSPORT -->
+<!-- ============================================================ -->
+<section class="screen" id="s-booking-location">
+  <div class="wrap section">
+    <div class="steps">
+      <div class="step done"><div class="dot">✓</div><span class="lbl">Items</span></div>
+      <div class="step done"><div class="step-line"></div><div class="dot">✓</div><span class="lbl">Date</span></div>
+      <div class="step done"><div class="step-line"></div><div class="dot">✓</div><span class="lbl">Details</span></div>
+      <div class="step current"><div class="step-line"></div><div class="dot">4</div><span class="lbl">Location</span></div>
+      <div class="step"><div class="step-line"></div><div class="dot">5</div><span class="lbl">Confirm</span></div>
+    </div>
+    <div class="field"><label>Event address</label><input value="No. 24, Kamaraj Salai, Sholinganallur, Chennai"></div>
+    <button class="btn btn-outline-light" style="background:var(--cream-2); color:var(--blue); border:1px solid var(--line); margin-bottom:14px;">📍 Use Current Location</button>
+    <div class="card" style="padding:0; overflow:hidden;">
+      <div style="height:150px; background:linear-gradient(135deg,#dfe6f5,#f3ecdd); display:flex; align-items:center; justify-content:center; position:relative;">
+        <span style="font-size:12px; color:var(--ink-soft);">Interactive map — APN store 📍 to event location 🏠</span>
+      </div>
+      <div style="padding:14px;">
+        <div class="sum-row"><span>Distance</span><span><b style="color:var(--blue-900);">8 km</b></span></div>
+        <div class="sum-row"><span>Transport rate</span><span>₹100 / km</span></div>
+        <div class="sum-row"><span>Transport charge</span><span>8 km × ₹100 = ₹800</span></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px;">
+      <div class="sum-row"><span>Items total</span><span id="locItemsTotal">₹0</span></div>
+      <div class="sum-row"><span>Transport charge</span><span>₹800</span></div>
+      <div class="sum-row total"><span>Estimated total</span><span id="locGrandTotal">₹0</span></div>
+    </div>
+    <button class="btn btn-primary btn-block btn-lg" style="margin-top:16px;" onclick="goTo('booking-summary')">Review Booking →</button>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 9. BOOKING SUMMARY & CONFIRMATION -->
+<!-- ============================================================ -->
+<section class="screen" id="s-booking-summary">
+  <div class="wrap section">
+    <div class="steps">
+      <div class="step done"><div class="dot">✓</div><span class="lbl">Items</span></div>
+      <div class="step done"><div class="step-line"></div><div class="dot">✓</div><span class="lbl">Date</span></div>
+      <div class="step done"><div class="step-line"></div><div class="dot">✓</div><span class="lbl">Details</span></div>
+      <div class="step done"><div class="step-line"></div><div class="dot">✓</div><span class="lbl">Location</span></div>
+      <div class="step current"><div class="step-line"></div><div class="dot">5</div><span class="lbl">Confirm</span></div>
+    </div>
+    <span class="eyebrow">Review before you submit</span>
+    <div class="card" style="margin-top:8px;">
+      <div class="sum-row"><span>Customer</span><span>Kavitha Raman</span></div>
+      <div class="sum-row"><span>Event</span><span>Wedding · 24 Oct 2026</span></div>
+      <div class="sum-row"><span>Location</span><span>Sholinganallur (8 km)</span></div>
+      <div class="divider"></div>
+      <div id="summaryItems"></div>
+      <div class="divider"></div>
+      <div class="sum-row"><span>Items total</span><span id="sumItemsTotal">₹0</span></div>
+      <div class="sum-row"><span>Transport</span><span>₹800</span></div>
+      <div class="sum-row total"><span>Total</span><span id="sumGrandTotal">₹0</span></div>
+    </div>
+    <div style="display:flex; gap:10px; margin-top:14px;">
+      <button class="btn" style="background:var(--cream-2); color:var(--blue); flex:1;" onclick="goTo('booking-details')">Edit Booking</button>
+      <button class="btn btn-primary" style="flex:2;" onclick="goTo('booking-confirmed')">Confirm Booking</button>
+    </div>
+  </div>
+</section>
+
+<section class="screen" id="s-booking-confirmed">
+  <div class="wrap section" style="text-align:center; padding-top:40px;">
+    <div style="width:70px; height:70px; border-radius:999px; background:rgba(58,157,93,0.15); display:flex; align-items:center; justify-content:center; font-size:34px; margin:0 auto 16px;">✅</div>
+    <h2 class="section-title" style="font-size:22px;">Booking request submitted!</h2>
+    <p style="color:var(--ink-soft); font-size:14px; margin-top:8px;">Your booking request has been received. Our team will call to confirm availability and finalise the booking.</p>
+    <div class="card" style="margin-top:20px; text-align:left;">
+      <div class="sum-row"><span>Booking ID</span><span><b style="color:var(--gold-deep);">APN-2026-1042</b></span></div>
+      <div class="sum-row"><span>Customer</span><span>Kavitha Raman</span></div>
+      <div class="sum-row"><span>Event date</span><span>24 Oct 2026</span></div>
+      <div class="sum-row"><span>Location</span><span>Sholinganallur (8 km)</span></div>
+      <div class="sum-row"><span>Transport</span><span>₹800</span></div>
+      <div class="sum-row total"><span>Estimated total</span><span id="confGrandTotal">₹0</span></div>
+    </div>
+    <button class="btn btn-primary btn-block btn-lg" style="margin-top:18px;" onclick="goTo('track')">Track This Booking</button>
+    <button class="btn btn-block" style="margin-top:10px; background:var(--cream-2); color:var(--blue);" onclick="goTo('home')">Back to Home</button>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 10. TRACK BOOKING -->
+<!-- ============================================================ -->
+<section class="screen" id="s-track">
+  <div class="wrap section">
+    <div class="section-head">
+      <span class="eyebrow">Track booking</span>
+      <h2 class="section-title">Check your booking status</h2>
+    </div>
+    <div class="field"><label>Mobile number</label><input placeholder="+91 9xxxx xxxxx"></div>
+    <div class="field"><label>Booking ID</label><input value="APN-2026-1042"></div>
+    <button class="btn btn-primary btn-block" onclick="document.getElementById('trackResult').style.display='block'">Track Booking</button>
+
+    <div class="card" id="trackResult" style="margin-top:18px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <b style="color:var(--blue-900); font-family:'Fraunces',serif;">APN-2026-1042</b>
+        <span class="status-pill status-confirmed">Confirmed</span>
+      </div>
+      <div class="track-line">
+        <div class="track-dot on"></div><div class="track-bar on"></div>
+        <div class="track-dot on"></div><div class="track-bar"></div>
+        <div class="track-dot"></div>
+      </div>
+      <div class="sum-row" style="padding:0 0 8px;"><span style="font-size:11px;">Pending</span><span style="font-size:11px;">Confirmed</span><span style="font-size:11px;">Completed</span></div>
+      <div class="divider"></div>
+      <div class="sum-row"><span>Customer</span><span>Kavitha Raman</span></div>
+      <div class="sum-row"><span>Event date</span><span>24 Oct 2026</span></div>
+      <div class="sum-row"><span>Items</span><span>3 categories, 62 pcs</span></div>
+      <div class="sum-row total"><span>Total</span><span>₹18,400</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 11. GALLERY -->
+<!-- ============================================================ -->
+<section class="screen" id="s-gallery">
+  <div class="wrap section">
+    <div class="section-head">
+      <span class="eyebrow">Gallery</span>
+      <h2 class="section-title">Events we've helped bring to life</h2>
+    </div>
+    <div class="filter-bar">
+      <div class="chip active">All</div><div class="chip">Weddings</div><div class="chip">Tents</div><div class="chip">Shamiyana</div><div class="chip">Chairs &amp; Tables</div><div class="chip">Decorations</div><div class="chip">Cooking Vessels</div>
+    </div>
+    <div class="gal-grid" id="galGrid"></div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 12. ABOUT -->
+<!-- ============================================================ -->
+<section class="screen" id="s-about">
+  <div class="hero-media" style="border-radius:0;">
+    <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?q=80&w=1000&auto=format&fit=crop" style="height:210px; object-fit:cover;">
+  </div>
+  <div class="wrap section">
+    <span class="eyebrow">Our story</span>
+    <h2 class="section-title">Three generations of getting event day right</h2>
+    <p style="color:var(--ink-soft); font-size:14.5px; line-height:1.7; margin-top:12px;">APN Events &amp; Rentals began as a small tent and chair supplier for village functions and has grown into a full event-rental service — without losing the personal attention of a family business. Every order, from a small birthday to a 2,000-guest wedding, is planned by someone in the family.</p>
+    <div class="feat-grid" style="margin-top:20px;">
+      <div class="feat-card"><div class="feat-icon">🤝</div><b>Trust</b><p>Long-standing relationships with families across the district.</p></div>
+      <div class="feat-card"><div class="feat-icon">⭐</div><b>Quality</b><p>Equipment inspected before every dispatch.</p></div>
+      <div class="feat-card"><div class="feat-icon">🕒</div><b>Reliable service</b><p>On-time delivery and pickup, always.</p></div>
+      <div class="feat-card"><div class="feat-icon">📦</div><b>Wide range</b><p>Tents to vessels — one call covers it all.</p></div>
+    </div>
+    <button class="btn btn-primary btn-block btn-lg" style="margin-top:20px;" onclick="goTo('contact')">Contact Us</button>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 13. CONTACT -->
+<!-- ============================================================ -->
+<section class="screen" id="s-contact">
+  <div class="wrap section">
+    <div class="section-head">
+      <span class="eyebrow">Get in touch</span>
+      <h2 class="section-title">We're happy to plan it with you</h2>
+    </div>
+    <div class="card" style="display:flex; flex-direction:column; gap:10px; margin-bottom:14px;">
+      <div class="sum-row"><span>📞 Phone</span><span><b>+91 98765 43210</b></span></div>
+      <div class="sum-row"><span>💬 WhatsApp</span><span><b>+91 98765 43210</b></span></div>
+      <div class="sum-row"><span>📍 Address</span><span style="text-align:right;">12, Anna Nagar Main Rd, Chennai</span></div>
+      <div class="sum-row"><span>🕘 Hours</span><span>8:00 AM – 8:00 PM, all days</span></div>
+    </div>
+    <div style="height:130px; border-radius:14px; background:linear-gradient(135deg,#dfe6f5,#f3ecdd); display:flex; align-items:center; justify-content:center; margin-bottom:16px;">
+      <span style="font-size:12px; color:var(--ink-soft);">Google Maps — store location embed</span>
+    </div>
+    <span class="eyebrow">Send a message</span>
+    <div class="field"><label>Name</label><input></div>
+    <div class="field"><label>Phone</label><input></div>
+    <div class="field"><label>Event date</label><input placeholder="dd/mm/yyyy"></div>
+    <div class="field"><label>Message</label><textarea></textarea></div>
+    <button class="btn btn-primary btn-block btn-lg">Send Message</button>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- ADMIN — shared shell used by all admin screens -->
+<!-- ============================================================ -->
+<div id="adminScreens">
+
+<section class="screen" id="s-admin-dashboard"><div class="admin-shell">
+  <aside class="admin-sidebar">
+    <div class="logo"><div class="logo-mark">APN</div><div class="logo-text"><b>APN Admin</b><span>Owner console</span></div></div>
+    <div class="admin-nav-item" data-a="admin-dashboard" onclick="goTo('admin-dashboard')"><span class="ic">📊</span>Dashboard</div>
+    <div class="admin-nav-item" data-a="admin-bookings" onclick="goTo('admin-bookings')"><span class="ic">📋</span>Bookings</div>
+    <div class="admin-nav-item" data-a="admin-products" onclick="goTo('admin-products')"><span class="ic">🏷️</span>Products</div>
+    <div class="admin-nav-item" data-a="admin-inventory" onclick="goTo('admin-inventory')"><span class="ic">📦</span>Inventory</div>
+    <div class="admin-nav-item" data-a="admin-calendar" onclick="goTo('admin-calendar')"><span class="ic">📅</span>Calendar</div>
+    <div class="sep"></div>
+    <div class="admin-nav-item" data-a="admin-deliveries" onclick="goTo('admin-deliveries')"><span class="ic">🗺️</span>Deliveries &amp; Map</div>
+    <div class="admin-back" onclick="exitAdmin()">← Back to customer site</div>
+  </aside>
+  <main class="admin-main">
+    <div class="admin-header">
+      <div><h2>Good morning, Prabhu 👋</h2><p>Here's how APN Events &amp; Rentals is doing today, 26 Aug 2026.</p></div>
+      <div class="admin-user-row"><button class="btn" style="background:var(--cream-2); color:var(--blue);">+ New Booking</button><div class="admin-avatar">PN</div></div>
+    </div>
+    <div class="metric-grid">
+      <div class="metric-card"><div class="m-icon" style="background:rgba(26,42,108,0.1); color:var(--blue);">📋</div><b>128<span class="delta up">▲12%</span></b><span>Total bookings (30d)</span></div>
+      <div class="metric-card"><div class="m-icon" style="background:rgba(201,138,31,0.15); color:var(--amber);">⏳</div><b>9</b><span>Pending confirmation</span></div>
+      <div class="metric-card"><div class="m-icon" style="background:rgba(58,157,93,0.15); color:var(--green);">₹</div><b>₹6.4L<span class="delta up">▲8%</span></b><span>Revenue this month</span></div>
+      <div class="metric-card"><div class="m-icon" style="background:rgba(201,160,74,0.18); color:var(--gold-deep);">📦</div><b>342</b><span>Items currently on rent</span></div>
+    </div>
+    <div class="admin-grid-2">
+      <div class="admin-card">
+        <div class="admin-card-head"><b>Recent bookings</b><span class="admin-link" onclick="goTo('admin-bookings')">View all →</span></div>
+        <table class="admin-table">
+          <tr><th>Booking</th><th>Customer</th><th>Event date</th><th>Total</th><th>Status</th></tr>
+          <tr><td>APN-1042</td><td>Kavitha Raman</td><td>24 Oct</td><td>₹18,400</td><td><span class="status-pill status-confirmed">Confirmed</span></td></tr>
+          <tr><td>APN-1041</td><td>Suresh Kumar</td><td>22 Oct</td><td>₹9,200</td><td><span class="status-pill status-pending">Pending</span></td></tr>
+          <tr><td>APN-1040</td><td>Meena S.</td><td>19 Oct</td><td>₹27,650</td><td><span class="status-pill status-confirmed">Confirmed</span></td></tr>
+          <tr><td>APN-1039</td><td>Arivazhagan T.</td><td>14 Oct</td><td>₹5,100</td><td><span class="status-pill status-completed">Completed</span></td></tr>
+          <tr><td>APN-1038</td><td>Divya &amp; Karthik</td><td>11 Oct</td><td>₹41,900</td><td><span class="status-pill status-completed">Completed</span></td></tr>
+        </table>
+      </div>
+      <div class="admin-card">
+        <div class="admin-card-head"><b>Low stock alerts</b><span class="admin-link" onclick="goTo('admin-inventory')">Inventory →</span></div>
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div><div style="display:flex; justify-content:space-between; font-size:12.5px; font-weight:600;"><span>Arabian Tent Canopy</span><span>2 / 12</span></div><div class="progress-track"><div class="progress-fill" style="width:17%; background:var(--red);"></div></div></div>
+          <div><div style="display:flex; justify-content:space-between; font-size:12.5px; font-weight:600;"><span>Round Table (6-seater)</span><span>6 / 40</span></div><div class="progress-track"><div class="progress-fill" style="width:15%; background:var(--red);"></div></div></div>
+          <div><div style="display:flex; justify-content:space-between; font-size:12.5px; font-weight:600;"><span>LED Stage Backdrop</span><span>3 / 8</span></div><div class="progress-track"><div class="progress-fill" style="width:38%; background:var(--amber);"></div></div></div>
+        </div>
+        <div class="admin-card-head" style="margin-top:20px;"><b>Today's deliveries</b><span class="admin-link" onclick="goTo('admin-deliveries')">Map →</span></div>
+        <p style="font-size:12.5px; color:var(--ink-soft); line-height:1.6;">3 events being set up today across Sholinganallur, Tambaram and Velachery.</p>
+      </div>
+    </div>
+  </main>
+</div></section>
+
+<section class="screen" id="s-admin-bookings"><div class="admin-shell">
+  <aside class="admin-sidebar">
+    <div class="logo"><div class="logo-mark">APN</div><div class="logo-text"><b>APN Admin</b><span>Owner console</span></div></div>
+    <div class="admin-nav-item" data-a="admin-dashboard" onclick="goTo('admin-dashboard')"><span class="ic">📊</span>Dashboard</div>
+    <div class="admin-nav-item" data-a="admin-bookings" onclick="goTo('admin-bookings')"><span class="ic">📋</span>Bookings</div>
+    <div class="admin-nav-item" data-a="admin-products" onclick="goTo('admin-products')"><span class="ic">🏷️</span>Products</div>
+    <div class="admin-nav-item" data-a="admin-inventory" onclick="goTo('admin-inventory')"><span class="ic">📦</span>Inventory</div>
+    <div class="admin-nav-item" data-a="admin-calendar" onclick="goTo('admin-calendar')"><span class="ic">📅</span>Calendar</div>
+    <div class="sep"></div>
+    <div class="admin-nav-item" data-a="admin-deliveries" onclick="goTo('admin-deliveries')"><span class="ic">🗺️</span>Deliveries &amp; Map</div>
+    <div class="admin-back" onclick="exitAdmin()">← Back to customer site</div>
+  </aside>
+  <main class="admin-main">
+    <div class="admin-header"><div><h2>Bookings</h2><p>All customer booking requests, oldest to newest.</p></div></div>
+    <div class="admin-filter-row">
+      <div class="filter-bar" style="padding:0;">
+        <div class="chip active">All (128)</div><div class="chip">Pending (9)</div><div class="chip">Confirmed (34)</div><div class="chip">Completed (81)</div><div class="chip">Cancelled (4)</div>
+      </div>
+      <input class="admin-search" placeholder="Search by name, phone or booking ID">
+    </div>
+    <div class="admin-card" style="padding:0; overflow:hidden;">
+      <table class="admin-table">
+        <tr><th>Booking ID</th><th>Customer</th><th>Event</th><th>Date</th><th>Items</th><th>Total</th><th>Status</th><th></th></tr>
+        <tr><td>APN-1042</td><td>Kavitha Raman</td><td>Wedding</td><td>24 Oct</td><td>3 categories</td><td>₹18,400</td><td><span class="status-pill status-confirmed">Confirmed</span></td><td><button class="mini-btn">View</button></td></tr>
+        <tr><td>APN-1041</td><td>Suresh Kumar</td><td>Birthday</td><td>22 Oct</td><td>2 categories</td><td>₹9,200</td><td><span class="status-pill status-pending">Pending</span></td><td><button class="mini-btn">Review</button></td></tr>
+        <tr><td>APN-1040</td><td>Meena S.</td><td>Temple Function</td><td>19 Oct</td><td>5 categories</td><td>₹27,650</td><td><span class="status-pill status-confirmed">Confirmed</span></td><td><button class="mini-btn">View</button></td></tr>
+        <tr><td>APN-1039</td><td>Arivazhagan T.</td><td>Engagement</td><td>14 Oct</td><td>1 category</td><td>₹5,100</td><td><span class="status-pill status-completed">Completed</span></td><td><button class="mini-btn">View</button></td></tr>
+        <tr><td>APN-1038</td><td>Divya &amp; Karthik</td><td>Wedding</td><td>11 Oct</td><td>6 categories</td><td>₹41,900</td><td><span class="status-pill status-completed">Completed</span></td><td><button class="mini-btn">View</button></td></tr>
+        <tr><td>APN-1037</td><td>Ganesh Textiles</td><td>Corporate Event</td><td>08 Oct</td><td>2 categories</td><td>₹12,300</td><td><span class="status-pill status-cancelled">Cancelled</span></td><td><button class="mini-btn danger">Archive</button></td></tr>
+      </table>
+    </div>
+  </main>
+</div></section>
+
+<section class="screen" id="s-admin-products"><div class="admin-shell">
+  <aside class="admin-sidebar">
+    <div class="logo"><div class="logo-mark">APN</div><div class="logo-text"><b>APN Admin</b><span>Owner console</span></div></div>
+    <div class="admin-nav-item" data-a="admin-dashboard" onclick="goTo('admin-dashboard')"><span class="ic">📊</span>Dashboard</div>
+    <div class="admin-nav-item" data-a="admin-bookings" onclick="goTo('admin-bookings')"><span class="ic">📋</span>Bookings</div>
+    <div class="admin-nav-item" data-a="admin-products" onclick="goTo('admin-products')"><span class="ic">🏷️</span>Products</div>
+    <div class="admin-nav-item" data-a="admin-inventory" onclick="goTo('admin-inventory')"><span class="ic">📦</span>Inventory</div>
+    <div class="admin-nav-item" data-a="admin-calendar" onclick="goTo('admin-calendar')"><span class="ic">📅</span>Calendar</div>
+    <div class="sep"></div>
+    <div class="admin-nav-item" data-a="admin-deliveries" onclick="goTo('admin-deliveries')"><span class="ic">🗺️</span>Deliveries &amp; Map</div>
+    <div class="admin-back" onclick="exitAdmin()">← Back to customer site</div>
+  </aside>
+  <main class="admin-main">
+    <div class="admin-header">
+      <div><h2>Products</h2><p>Manage what customers see in the rental catalogue.</p></div>
+      <button class="btn btn-primary">+ Add Product</button>
+    </div>
+    <div class="admin-filter-row">
+      <div class="filter-bar" style="padding:0;">
+        <div class="chip active">All</div><div class="chip">Tents</div><div class="chip">Seating</div><div class="chip">Tables</div><div class="chip">Decoration</div><div class="chip">Vessels</div>
+      </div>
+      <input class="admin-search" placeholder="Search products">
+    </div>
+    <div class="admin-card" style="padding:0; overflow:hidden;">
+      <table class="admin-table" id="adminProductsTable"></table>
+    </div>
+  </main>
+</div></section>
+
+<section class="screen" id="s-admin-inventory"><div class="admin-shell">
+  <aside class="admin-sidebar">
+    <div class="logo"><div class="logo-mark">APN</div><div class="logo-text"><b>APN Admin</b><span>Owner console</span></div></div>
+    <div class="admin-nav-item" data-a="admin-dashboard" onclick="goTo('admin-dashboard')"><span class="ic">📊</span>Dashboard</div>
+    <div class="admin-nav-item" data-a="admin-bookings" onclick="goTo('admin-bookings')"><span class="ic">📋</span>Bookings</div>
+    <div class="admin-nav-item" data-a="admin-products" onclick="goTo('admin-products')"><span class="ic">🏷️</span>Products</div>
+    <div class="admin-nav-item" data-a="admin-inventory" onclick="goTo('admin-inventory')"><span class="ic">📦</span>Inventory</div>
+    <div class="admin-nav-item" data-a="admin-calendar" onclick="goTo('admin-calendar')"><span class="ic">📅</span>Calendar</div>
+    <div class="sep"></div>
+    <div class="admin-nav-item" data-a="admin-deliveries" onclick="goTo('admin-deliveries')"><span class="ic">🗺️</span>Deliveries &amp; Map</div>
+    <div class="admin-back" onclick="exitAdmin()">← Back to customer site</div>
+  </aside>
+  <main class="admin-main">
+    <div class="admin-header"><div><h2>Inventory</h2><p>Stock on hand vs. currently rented out, by item.</p></div></div>
+    <div class="admin-card">
+      <table class="admin-table">
+        <tr><th>Item</th><th>Total stock</th><th>On rent</th><th>Available</th><th>Utilisation</th></tr>
+        <tr><td><span class="product-thumb" style="background-image:url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=200&auto=format&fit=crop')"></span>Pipe Tent (20x30 ft)</td><td>18</td><td>11</td><td>7</td><td style="width:160px;"><div class="progress-track"><div class="progress-fill" style="width:61%;"></div></div></td></tr>
+        <tr><td><span class="product-thumb" style="background-image:url('https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?q=80&w=200&auto=format&fit=crop')"></span>Plastic Chair (set of 50)</td><td>60</td><td>22</td><td>38</td><td style="width:160px;"><div class="progress-track"><div class="progress-fill" style="width:37%;"></div></div></td></tr>
+        <tr><td><span class="product-thumb" style="background-image:url('https://images.unsplash.com/photo-1519671845924-1fd18db430b8?q=80&w=200&auto=format&fit=crop')"></span>Round Table (6-seater)</td><td>40</td><td>34</td><td>6</td><td style="width:160px;"><div class="progress-track"><div class="progress-fill" style="width:85%; background:var(--amber);"></div></div></td></tr>
+        <tr><td><span class="product-thumb" style="background-image:url('https://images.unsplash.com/photo-1590779033100-9f60a05a013d?q=80&w=200&auto=format&fit=crop')"></span>Large Biryani Vessel 50kg</td><td>10</td><td>4</td><td>6</td><td style="width:160px;"><div class="progress-track"><div class="progress-fill" style="width:40%;"></div></div></td></tr>
+        <tr><td><span class="product-thumb" style="background-image:url('https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?q=80&w=200&auto=format&fit=crop')"></span>Arabian Tent Canopy</td><td>12</td><td>10</td><td>2</td><td style="width:160px;"><div class="progress-track"><div class="progress-fill" style="width:83%; background:var(--red);"></div></div></td></tr>
+      </table>
+    </div>
+  </main>
+</div></section>
+
+<section class="screen" id="s-admin-calendar"><div class="admin-shell">
+  <aside class="admin-sidebar">
+    <div class="logo"><div class="logo-mark">APN</div><div class="logo-text"><b>APN Admin</b><span>Owner console</span></div></div>
+    <div class="admin-nav-item" data-a="admin-dashboard" onclick="goTo('admin-dashboard')"><span class="ic">📊</span>Dashboard</div>
+    <div class="admin-nav-item" data-a="admin-bookings" onclick="goTo('admin-bookings')"><span class="ic">📋</span>Bookings</div>
+    <div class="admin-nav-item" data-a="admin-products" onclick="goTo('admin-products')"><span class="ic">🏷️</span>Products</div>
+    <div class="admin-nav-item" data-a="admin-inventory" onclick="goTo('admin-inventory')"><span class="ic">📦</span>Inventory</div>
+    <div class="admin-nav-item" data-a="admin-calendar" onclick="goTo('admin-calendar')"><span class="ic">📅</span>Calendar</div>
+    <div class="sep"></div>
+    <div class="admin-nav-item" data-a="admin-deliveries" onclick="goTo('admin-deliveries')"><span class="ic">🗺️</span>Deliveries &amp; Map</div>
+    <div class="admin-back" onclick="exitAdmin()">← Back to customer site</div>
+  </aside>
+  <main class="admin-main">
+    <div class="admin-header"><div><h2>Calendar</h2><p>Every booked event this month, at a glance.</p></div></div>
+    <div class="admin-card">
+      <div class="cal-head"><button class="icon-btn" style="background:var(--cream-2); color:var(--blue);">‹</button><b style="font-family:'Fraunces',serif; color:var(--blue-900);">October 2026</b><button class="icon-btn" style="background:var(--cream-2); color:var(--blue);">›</button></div>
+      <div class="admin-cal" id="adminCal"></div>
+    </div>
+  </main>
+</div></section>
+
+<section class="screen" id="s-admin-deliveries"><div class="admin-shell">
+  <aside class="admin-sidebar">
+    <div class="logo"><div class="logo-mark">APN</div><div class="logo-text"><b>APN Admin</b><span>Owner console</span></div></div>
+    <div class="admin-nav-item" data-a="admin-dashboard" onclick="goTo('admin-dashboard')"><span class="ic">📊</span>Dashboard</div>
+    <div class="admin-nav-item" data-a="admin-bookings" onclick="goTo('admin-bookings')"><span class="ic">📋</span>Bookings</div>
+    <div class="admin-nav-item" data-a="admin-products" onclick="goTo('admin-products')"><span class="ic">🏷️</span>Products</div>
+    <div class="admin-nav-item" data-a="admin-inventory" onclick="goTo('admin-inventory')"><span class="ic">📦</span>Inventory</div>
+    <div class="admin-nav-item" data-a="admin-calendar" onclick="goTo('admin-calendar')"><span class="ic">📅</span>Calendar</div>
+    <div class="sep"></div>
+    <div class="admin-nav-item" data-a="admin-deliveries" onclick="goTo('admin-deliveries')"><span class="ic">🗺️</span>Deliveries &amp; Map</div>
+    <div class="admin-back" onclick="exitAdmin()">← Back to customer site</div>
+  </aside>
+  <main class="admin-main">
+    <div class="admin-header"><div><h2>Today's deliveries</h2><p>Route overview for the team heading out today, 26 Aug.</p></div></div>
+    <div class="admin-grid-2">
+      <div class="admin-card" style="padding:0; overflow:hidden;">
+        <div style="height:320px; background:linear-gradient(135deg,#dfe6f5,#f3ecdd); display:flex; align-items:center; justify-content:center;">
+          <span style="font-size:12.5px; color:var(--ink-soft);">Map — APN store 📍 with 3 delivery pins &amp; routes</span>
+        </div>
+      </div>
+      <div class="admin-card">
+        <div class="admin-card-head"><b>Stops today</b></div>
+        <table class="admin-table">
+          <tr><th>Customer</th><th>Area</th><th>Distance</th><th>ETA</th></tr>
+          <tr><td>Kavitha Raman</td><td>Sholinganallur</td><td>8 km</td><td>9:30 AM</td></tr>
+          <tr><td>Suresh Kumar</td><td>Tambaram</td><td>14 km</td><td>11:00 AM</td></tr>
+          <tr><td>Meena S.</td><td>Velachery</td><td>6 km</td><td>1:30 PM</td></tr>
+        </table>
+      </div>
+    </div>
+  </main>
+</div></section>
+
+</div><!-- /adminScreens -->
+
+<!-- FOOTER (shown on content screens) -->
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div><b>APN Events &amp; Rentals</b><p style="font-size:12.5px; margin-top:8px; opacity:0.8;">Everything you need for your special events.</p></div>
+      <div><b>Explore</b><a onclick="goTo('categories')">Rentals</a><a onclick="goTo('gallery')">Gallery</a><a onclick="goTo('about')">About</a></div>
+      <div><b>Support</b><a onclick="goTo('track')">Track Booking</a><a onclick="goTo('contact')">Contact</a></div>
+      <div><b>Reach us</b><a>📞 +91 98765 43210</a><a>💬 WhatsApp</a></div>
+    </div>
+    <div class="bunting soft"></div>
+    <p style="font-size:11.5px; opacity:0.6;">© 2026 APN Events &amp; Rentals — Design prototype, not a live site.</p>
+  </div>
+</footer>
+
+<!-- floating actions + bottom nav (mobile) -->
+<div class="fab-row hide-desktop">
+  <div class="fab wa">💬</div>
+  <div class="fab call">📞</div>
+</div>
+<div class="bottom-nav">
+  <button class="nav-link active" data-s="home" onclick="goTo('home')"><span class="ic">🏠</span>Home</button>
+  <button class="nav-link" data-s="categories" onclick="goTo('categories')"><span class="ic">🗂️</span>Categories</button>
+  <button class="nav-link" data-s="cart" onclick="goTo('cart')"><span class="ic">🛒</span>Cart<span class="cart-dot" id="cartDot">0</span></button>
+  <button class="nav-link" data-s="track" onclick="goTo('track')"><span class="ic">📋</span>Bookings</button>
+  <button class="nav-link" data-s="contact" onclick="goTo('contact')"><span class="ic">☎️</span>Contact</button>
+</div>
+
+</div><!-- /device-scroll -->
+</div><!-- /device -->
+</div><!-- /stage -->
+
+<script>
+/* ---------------- data ---------------- */
+const categories = [
+  {name:"Tents & Venue Setup", ta:"கூடாரம்", count:"32 items", img:"https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=500&auto=format&fit=crop"},
+  {name:"Chairs & Seating", ta:"நாற்காலி", count:"18 items", img:"https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?q=80&w=500&auto=format&fit=crop"},
+  {name:"Tables", ta:"மேசை", count:"9 items", img:"https://images.unsplash.com/photo-1519671845924-1fd18db430b8?q=80&w=500&auto=format&fit=crop"},
+  {name:"Wedding & Decoration", ta:"அலங்காரம்", count:"46 items", img:"https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=500&auto=format&fit=crop"},
+  {name:"Cooking Vessels", ta:"பாத்திரங்கள்", count:"27 items", img:"https://images.unsplash.com/photo-1590779033100-9f60a05a013d?q=80&w=500&auto=format&fit=crop"},
+  {name:"Other Rentals", ta:"மற்றவை", count:"14 items", img:"https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?q=80&w=500&auto=format&fit=crop"},
+];
+const products = [
+  {name:"Pipe Tent (20x30 ft)", ta:"பைப் கூடாரம்", price:2500, unit:"/day", status:"green", img:"https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=500&auto=format&fit=crop"},
+  {name:"Plastic Chair (set of 50)", ta:"நாற்காலி", price:750, unit:"/day", status:"green", img:"https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?q=80&w=500&auto=format&fit=crop"},
+  {name:"Round Table (6-seater)", ta:"மேசை", price:180, unit:"/day", status:"amber", img:"https://images.unsplash.com/photo-1519671845924-1fd18db430b8?q=80&w=500&auto=format&fit=crop"},
+  {name:"Mandap Decoration Set", ta:"மண்டப அலங்காரம்", price:9500, unit:"/event", status:"green", img:"https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=500&auto=format&fit=crop"},
+  {name:"Large Biryani Vessel 50kg", ta:"பிரியாணி பாத்திரம்", price:350, unit:"/day", status:"green", img:"https://images.unsplash.com/photo-1590779033100-9f60a05a013d?q=80&w=500&auto=format&fit=crop"},
+  {name:"Sambar Vessel 30L", ta:"சாம்பார் பாத்திரம்", price:220, unit:"/day", status:"green", img:"https://images.unsplash.com/photo-1585238342029-6bfd7ecc5f8f?q=80&w=500&auto=format&fit=crop"},
+  {name:"Arabian Tent Canopy", ta:"அரேபிய கூடாரம்", price:4200, unit:"/day", status:"red", img:"https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?q=80&w=500&auto=format&fit=crop"},
+  {name:"LED Stage Backdrop", ta:"மேடை அலங்காரம்", price:6800, unit:"/event", status:"amber", img:"https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=500&auto=format&fit=crop"},
+];
+const galleryImgs = [
+  "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=500&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=500&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1590779033100-9f60a05a013d?q=80&w=500&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?q=80&w=500&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?q=80&w=500&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=500&auto=format&fit=crop",
+];
+const cart = [
+  {name:"Pipe Tent (20x30 ft)", price:2500, qty:1, img:products[0].img},
+  {name:"Plastic Chair (set of 50)", price:750, qty:2, img:products[1].img},
+  {name:"Large Biryani Vessel 50kg", price:350, qty:3, img:products[4].img},
+];
+
+function badgeClass(s){return s==='green'?'green':(s==='amber'?'amber':'red');}
+function badgeLabel(s){return s==='green'?'● Available':(s==='amber'?'● Limited':'● Sold out');}
+
+function catCard(c){
+  return `<div class="cat-card" onclick="goTo('listing')">
+    <div class="cat-img" style="background-image:url('${c.img}')"></div>
+    <div class="cat-body"><b>${c.name}</b><span>${c.count} · <span class="tamil">${c.ta}</span></span></div>
+  </div>`;
+}
+function prodCard(p, i){
+  return `<div class="prod-card">
+    <div class="prod-img" style="background-image:url('${p.img}')" onclick="goTo('detail')">
+      <span class="badge ${badgeClass(p.status)}">${badgeLabel(p.status)}</span>
+    </div>
+    <div class="prod-body">
+      <div class="prod-name" onclick="goTo('detail')">${p.name}<span class="ta tamil">${p.ta}</span></div>
+      <div class="prod-price">₹${p.price}<span>${p.unit}</span></div>
+      <div class="qty-row">
+        <div class="stepper"><button onclick="event.stopPropagation()">–</button><span>1</span><button onclick="event.stopPropagation()">+</button></div>
+        <button class="add-btn" onclick="addToCartToast(event)">+ Add</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+document.getElementById('homeCatGrid').innerHTML = categories.slice(0,4).map(catCard).join('');
+document.getElementById('fullCatGrid').innerHTML = categories.map(catCard).join('');
+document.getElementById('homeProdGrid').innerHTML = products.slice(0,4).map(prodCard).join('');
+document.getElementById('listingGrid').innerHTML = products.map(prodCard).join('');
+document.getElementById('similarRow').innerHTML = products.slice(4,7).map(p=>`
+  <div style="flex:none; width:120px;">
+    <div style="width:120px; height:120px; border-radius:12px; background-image:url('${p.img}'); background-size:cover; margin-bottom:6px;"></div>
+    <div style="font-size:11.5px; font-weight:600; color:var(--blue-900); line-height:1.3;">${p.name}</div>
+    <div style="font-size:12px; color:var(--gold-deep); font-weight:700;">₹${p.price}${p.unit}</div>
+  </div>`).join('');
+document.getElementById('galGrid').innerHTML = galleryImgs.map(g=>`<img src="${g}">`).join('');
+
+function renderCart(){
+  const list = document.getElementById('cartList');
+  if(!list) return;
+  list.innerHTML = cart.map((it,i)=>`
+    <div class="card" style="display:flex; gap:12px; align-items:center; margin-bottom:10px;">
+      <div style="width:56px; height:56px; border-radius:10px; background-image:url('${it.img}'); background-size:cover; flex:none;"></div>
+      <div style="flex:1; min-width:0;">
+        <div style="font-size:13px; font-weight:600; color:var(--blue-900);">${it.name}</div>
+        <div style="font-size:12px; color:var(--ink-soft);">₹${it.price} / unit</div>
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-top:6px;">
+          <div class="stepper"><button onclick="changeQty(${i},-1)">–</button><span>${it.qty}</span><button onclick="changeQty(${i},1)">+</button></div>
+          <b style="font-size:13px; color:var(--gold-deep);">₹${it.price*it.qty}</b>
+        </div>
+      </div>
+      <button onclick="removeItem(${i})" style="background:none; color:var(--red); font-size:16px;">🗑️</button>
+    </div>`).join('');
+  updateTotals();
+}
+function updateTotals(){
+  const sub = cart.reduce((s,it)=>s+it.price*it.qty,0);
+  const transport = 800;
+  const total = sub+transport;
+  const set = (id,val)=>{const el=document.getElementById(id); if(el) el.textContent=val;};
+  set('cartSubtotal','₹'+sub.toLocaleString('en-IN'));
+  set('cartTotal','₹'+total.toLocaleString('en-IN'));
+  set('locItemsTotal','₹'+sub.toLocaleString('en-IN'));
+  set('locGrandTotal','₹'+total.toLocaleString('en-IN'));
+  set('sumItemsTotal','₹'+sub.toLocaleString('en-IN'));
+  set('sumGrandTotal','₹'+total.toLocaleString('en-IN'));
+  set('confGrandTotal','₹'+total.toLocaleString('en-IN'));
+  const dot = document.getElementById('cartDot'); if(dot) dot.textContent = cart.reduce((s,it)=>s+it.qty,0);
+  const si = document.getElementById('summaryItems');
+  if(si) si.innerHTML = cart.map(it=>`<div class="sum-row"><span>${it.name} × ${it.qty}</span><span>₹${it.price*it.qty}</span></div>`).join('');
+}
+function changeQty(i,d){ cart[i].qty = Math.max(1, cart[i].qty+d); renderCart(); }
+function removeItem(i){ cart.splice(i,1); renderCart(); }
+function addToCartToast(e){ if(e) e.stopPropagation(); toast('Added to your booking'); renderCart(); }
+function stepQty(d){ const el=document.getElementById('detailQty'); el.textContent = Math.max(1, parseInt(el.textContent)+d); }
+
+function toast(msg){
+  let t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed; left:50%; bottom:96px; transform:translateX(-50%); background:var(--blue-900); color:#fff; padding:10px 18px; border-radius:999px; font-size:13px; z-index:99; box-shadow:0 8px 20px rgba(0,0,0,0.25);';
+  document.getElementById('device').appendChild(t);
+  setTimeout(()=>t.remove(),1600);
+}
+
+/* calendar */
+const calDays = document.getElementById('calDays');
+let calHtml = '';
+for(let i=0;i<3;i++) calHtml += '<div class="cal-day empty"></div>';
+for(let d=1; d<=31; d++){
+  let cls='cal-day avail'; let click=`onclick="selectDay(this)"`;
+  if([5,6,12,13,19,20].includes(d)){cls='cal-day unavail'; click='';}
+  if(d===24){cls='cal-day avail sel';}
+  calHtml += `<div class="${cls}" ${click}>${d}</div>`;
+}
+calDays.innerHTML = calHtml;
+function selectDay(el){
+  document.querySelectorAll('.cal-day.sel').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+/* ---------------- admin data ---------------- */
+function adminProdRow(p){
+  return `<tr><td><span class="product-thumb" style="background-image:url('${p.img}')"></span>${p.name}</td><td>₹${p.price}${p.unit}</td><td>${badgeLabel(p.status)}</td><td><button class="mini-btn">Edit</button> <button class="mini-btn danger">Remove</button></td></tr>`;
+}
+const adminTbl = document.getElementById('adminProductsTable');
+if(adminTbl){
+  adminTbl.innerHTML = '<tr><th>Product</th><th>Price</th><th>Status</th><th></th></tr>' + products.map(adminProdRow).join('');
+}
+const adminCal = document.getElementById('adminCal');
+if(adminCal){
+  const dow = ['S','M','T','W','T','F','S'];
+  let h = dow.map(d=>`<div class="adow">${d}</div>`).join('');
+  for(let i=0;i<3;i++) h += '<div></div>';
+  const busy = {5:['Ramesh — Wedding'],12:['Priya — Birthday','Anand — Function'],19:['Meena — Temple'],24:['Kavitha — Wedding'],28:['Divya — Reception']};
+  for(let d=1; d<=31; d++){
+    let evHtml = (busy[d]||[]).map(e=>`<span class="ev busy">${e}</span>`).join('');
+    h += `<div class="aday ${d===26?'today':''}">${d}${evHtml}</div>`;
+  }
+  adminCal.innerHTML = h;
+}
+function exitAdmin(){ goTo('home'); }
+
+/* ---------------- screen routing ---------------- */
+const screenIds = ['home','categories','listing','detail','cart','booking-date','booking-details','booking-location','booking-summary','booking-confirmed','track','gallery','about','contact',
+  'admin-dashboard','admin-bookings','admin-products','admin-inventory','admin-calendar','admin-deliveries'];
+const screenLabels = {
+  'home':'1 · Homepage','categories':'2 · Rental Categories','listing':'3 · Product Listing','detail':'4 · Product Details',
+  'cart':'5 · Booking Cart','booking-date':'6 · Booking — Event Date','booking-details':'7 · Booking — Customer & Event Details',
+  'booking-location':'8 · Booking — Location & Transport','booking-summary':'9 · Booking Summary','booking-confirmed':'9b · Confirmation',
+  'track':'10 · Track Booking','gallery':'11 · Gallery','about':'12 · About Us','contact':'13 · Contact',
+  'admin-dashboard':'⚙ Admin — Dashboard','admin-bookings':'⚙ Admin — Bookings','admin-products':'⚙ Admin — Products',
+  'admin-inventory':'⚙ Admin — Inventory','admin-calendar':'⚙ Admin — Calendar','admin-deliveries':'⚙ Admin — Deliveries & Map'
+};
+const sel = document.getElementById('screenSelect');
+screenIds.forEach(id=>{
+  const o = document.createElement('option'); o.value=id; o.textContent=screenLabels[id]; sel.appendChild(o);
+});
+function goTo(id){
+  screenIds.forEach(s=>document.getElementById('s-'+s).classList.remove('active'));
+  document.getElementById('s-'+id).classList.add('active');
+  sel.value = id;
+  document.querySelectorAll('.nav-link').forEach(n=>n.classList.toggle('active', n.dataset.s===id));
+  document.querySelectorAll('.admin-nav-item').forEach(n=>n.classList.toggle('active', n.dataset.a===id));
+  document.getElementById('deviceScroll').scrollTo(0,0);
+  document.body.classList.toggle('admin-mode', id.startsWith('admin-'));
+  if(id.startsWith('admin-')) setViewport('desktop');
+  if(id==='cart' || id==='booking-location' || id==='booking-summary' || id==='booking-confirmed') renderCart();
+}
+function setViewport(mode){
+  const device = document.getElementById('device');
+  document.getElementById('vpMobile').classList.toggle('on', mode==='mobile');
+  document.getElementById('vpDesktop').classList.toggle('on', mode==='desktop');
+  device.classList.toggle('mobile', mode==='mobile');
+  device.classList.toggle('desktop', mode==='desktop');
+}
+renderCart();
+</script>
+</body>
+</html>
